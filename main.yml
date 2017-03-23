@@ -1,0 +1,16 @@
+---
+- name: GET STRUCTURED DATA BACK FROM CLI DEVICES
+  hosts: all
+  connection: local
+  gather_facts: False
+
+  tasks:
+
+    - name: Creates directory
+      file: path=/home/test/.ssh state=directory mode=0700 owner=test group=test
+#      file: path=/home/test/.ssh/ state=directory
+
+    - name: Generate SSH keys
+      shell: ssh-keygen -t rsa -f /home/test/.ssh/id_rsa -q -N "" creates=/home/test/.ssh/id_rsa
+#- name: Downloading pub key
+#    fetch: src=/etc/ansible/playbooks/roles/ec2key/tasks/.ssh/id_rsa.pub dest=/etc/ansible/playbooks/roles/ec2key/tasks/.ssh/id_rsa.tmp flat=yes

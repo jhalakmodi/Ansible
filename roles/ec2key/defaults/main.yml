@@ -1,0 +1,9 @@
+---
+ssh_keygen_bits: 4096
+ssh_keygen_email: "testing@jmodi.com"
+ssh_keygen_password: ""
+ssh_keygen_user: "testing"
+ssh_keygen_rsa: yes
+ssh_keygen_types: 
+  - rsa
+  - ed25519

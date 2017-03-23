@@ -1,0 +1,7 @@
+---
+- include: keyd.yml
+
+- name: Generate SSH keys
+  command: ssh-keygen -t {{ item }} -b {{ ssh_keygen_bits }} -C "{{ ssh_keygen_email }}" -N "{{ ssh_keygen_password }}" -f /home/{{ ansible_ssh_user }}/.ssh/id_{{ item }} creates=/home/{{ ssh_keygen_user }}/.ssh/id_{{ item }} 
+  with_items: 
+   - "{{ ssh_keygen_types }}"

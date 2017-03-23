@@ -1,0 +1,13 @@
+---
+- name: install pack
+  hosts: localhost
+  connection: local
+  gather_facts: False
+
+#  roles:
+#    -  role: ssh-keygen
+#       ssh_keygen_email: modijhalak@gmail.com
+#- name: Instal packages
+# yum: pkg={{item}} state=present install_recommends=false
+#  with_items:
+#     - openssl
