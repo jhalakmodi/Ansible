@@ -1,7 +1,7 @@
 ---
 - user:
     name: "{{ ssh_keygen_user }}"
-    comment: "John Doe"
+    comment: "Created using Ansible"
 
 - name: Check .ssh dir
   file: path=/home/{{ ssh_keygen_user }}/.ssh state=directory mode=0700 owner={{ ssh_keygen_user }} group={{ ssh_keygen_user }}
@@ -15,3 +15,25 @@
     state: present
     key: "{{ lookup('file', '/home/{{ ssh_keygen_user }}/.ssh/id_rsa.pub') }}"
 
+- name: put private key into S3
+  s3:
+    bucket: "{{ BUCKET_NAME }}" 
+    object: SSH-Privatekey.pem
+    src: /home/{{ ssh_keygen_user }}/.ssh/id_{{ ssh_keygen_type }}
+    mode: put
+    region: "{{ AWS_Region }}"
+
+- name: put public key into S3
+  s3:
+    bucket: "{{ BUCKET_NAME }}"
+    object: SSH-Publickey.pem
+    src: /home/{{ ssh_keygen_user }}/.ssh/id_{{ ssh_keygen_type }}.pub
+    mode: put
+    region: "{{ AWS_Region }}"
+
+- name: Import SSH key pair into EC2
+  ec2_key:
+    name: SSH-Key_{{ ssh_keygen_user }}
+    state: present
+    aws_region: "{{ AWS_Region }}"
+  with_file: /home/{{ ssh_keygen_user }}/.ssh/id_{{ ssh_keygen_type }}.pub

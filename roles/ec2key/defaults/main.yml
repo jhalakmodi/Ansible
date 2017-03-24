@@ -5,3 +5,5 @@ ssh_keygen_password: ""
 ssh_keygen_user: "testi"
 ssh_keygen_rsa: yes
 ssh_keygen_type: rsa
+BUCKET_NAME: jmodi-kogentix
+AWS_Region: us-west-2
