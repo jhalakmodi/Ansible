@@ -1,7 +1,17 @@
 ---
-- include: keyd.yml
+- user:
+    name: "{{ ssh_keygen_user }}"
+    comment: "John Doe"
 
-- name: Generate SSH keys
-  command: ssh-keygen -t {{ item }} -b {{ ssh_keygen_bits }} -C "{{ ssh_keygen_email }}" -N "{{ ssh_keygen_password }}" -f /home/{{ ansible_ssh_user }}/.ssh/id_{{ item }} creates=/home/{{ ssh_keygen_user }}/.ssh/id_{{ item }} 
-  with_items: 
-   - "{{ ssh_keygen_types }}"
+- name: Check .ssh dir
+  file: path=/home/{{ ssh_keygen_user }}/.ssh state=directory mode=0700 owner={{ ssh_keygen_user }} group={{ ssh_keygen_user }}
+
+- name: Create keys
+  command: ssh-keygen -t {{ ssh_keygen_type }} -b {{ ssh_keygen_bits }} -C "{{ ssh_keygen_email }}" -N "{{ ssh_keygen_password }}" -f /home/{{ ssh_keygen_user }}/.ssh/id_{{ ssh_keygen_type }} creates=/home/{{ ssh_keygen_user }}/.ssh/id_{{ ssh_keygen_type }}
+
+- name: Set authorized key took from file
+  authorized_key:
+    user: "{{ ssh_keygen_user }}"
+    state: present
+    key: "{{ lookup('file', '/home/{{ ssh_keygen_user }}/.ssh/id_rsa.pub') }}"
+

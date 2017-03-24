@@ -1,0 +1,9 @@
+---
+- name: Local computer
+  hosts: all
+  connection: local
+  sudo: True
+  vars_files:
+    - "roles/ec2key/defaults/main.yml"
+  roles:
+    - ec2key
